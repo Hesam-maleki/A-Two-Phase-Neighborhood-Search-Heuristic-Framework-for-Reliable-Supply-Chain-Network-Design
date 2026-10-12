@@ -1,6 +1,0 @@
-# IBM ILOG CPLEX Optimization Studio 22.1 (academic or commercial edition) must be
-# installed separately, with its Python API on the path. The CPLEX Community
-# Edition (pip install cplex) is limited to 1000 variables and 1000 constraints
-# and cannot solve these models.
-docplex==2.31.254
-openpyxl==3.1.5
