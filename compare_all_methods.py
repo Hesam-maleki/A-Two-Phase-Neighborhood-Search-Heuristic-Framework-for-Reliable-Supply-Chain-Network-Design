@@ -442,7 +442,7 @@ def print_comparison(results: dict, inst: LNDPInstance):
     def sep():
         print("  " + "-" * (32 + W * 4))
 
-    labels = [c["label"] for c in cases]
+    labels = ["Exact C&CG", "Early-stopped C&CG", "H1", "H2"]
     print("\n" + "=" * (32 + W * 4 + 2))
     print("  FOUR-METHOD COMPARISON")
     print("=" * (32 + W * 4 + 2))
@@ -453,12 +453,13 @@ def print_comparison(results: dict, inst: LNDPInstance):
     sep()
 
     row("Status",             [c["status"] for c in cases])
-    row("Iterations / sweeps",[c.get("iters", "-") for c in cases])
+    row("Iterations / sweeps",[c1["iters"], c2["iters"],
+                               c3["p2_sweeps"], c4["p2_sweeps"]])
     row("Solve time (s)",     [c["time"] for c in cases], fmt="{:.1f}")
     sep()
     row("Upper bound (UB)",   [c["UB"] for c in cases],   fmt="{:,.2f}")
     row("Lower bound (LB)",   [c["LB"] for c in cases],   fmt="{:,.2f}")
-    row("Gap %",              [c["gap"] for c in cases],  fmt="{:.4f}", suffix="%")
+    row("Gap %",              [max(0.0, c["gap"]) for c in cases], fmt="{:.4f}", suffix="%")
     sep()
     row("Fixed cost",         [c["fc"] for c in cases],   fmt="{:,.2f}")
     row("Worst-case recourse",[c["recourse"] for c in cases], fmt="{:,.2f}")
@@ -466,9 +467,9 @@ def print_comparison(results: dict, inst: LNDPInstance):
     row("Unmet demand",       [c["unmet"] for c in cases], fmt="{:.2f}")
 
     print()
-    for c in cases:
+    for lbl, c in zip(labels, cases):
         open_facs = sorted(j for j in inst.V0 if c["y"].get(j, 0) == 1)
-        print(f"  {c['label']:<32}  open: {open_facs}")
+        print(f"  {lbl:<32}  open: {open_facs}")
 
     print("=" * (32 + W * 4 + 2))
 

@@ -6,11 +6,20 @@ Bozorgi-Amiri; submitted to *Supply Chain Analytics*).
 ## Requirements
 
 - Python 3.10
-- IBM ILOG CPLEX Optimization Studio 22.1, academic or commercial edition,
-  with its Python API installed. The free CPLEX Community Edition
-  (`pip install cplex`) is limited to 1000 variables and 1000 constraints
-  and cannot solve these models.
+- IBM ILOG CPLEX Optimization Studio 22.1, academic or commercial edition.
+  The free CPLEX Community Edition (`pip install cplex`) is limited to 1000
+  variables and 1000 constraints and cannot solve these models.
 - `pip install -r requirements.txt` (docplex, openpyxl)
+
+To check that docplex finds the CPLEX engine:
+
+```
+python -c "from docplex.mp.environment import Environment; print(Environment.get_default_env().cplex_version)"
+```
+
+docplex locates the CPLEX engine through the `CPLEX_STUDIO_DIR2211`
+environment variable set by the CPLEX installer, so `import cplex` failing
+does not mean the setup is broken.
 
 ## Files
 
@@ -87,7 +96,7 @@ To rebuild the CSV of an existing run from its workbooks:
 | Time | `exact_time` | `early_time` | `H1_time` | `H2_time` |
 | Gap | `exact_gap` | `early_gap` | `H1_gap` | not reported |
 | UB | `exact_UB` | `early_UB` | `H1_UB` | `H2_UB` |
-| ΔUB (%) | | | `deltaUB_H1_pct` | `deltaUB_H2_pct` |
+| Delta UB (%) | | | `deltaUB_H1_pct` | `deltaUB_H2_pct` |
 
 ### Definitions
 
@@ -101,7 +110,7 @@ To rebuild the CSV of an existing run from its workbooks:
   C&CG master bound. For H1, LB is the lower bound frozen at the end of
   Phase 1. For H2 the available bound (the no-disruption MIP objective) is
   too loose to be meaningful, so no gap is reported.
-- **ΔUB.** (UB_H - UB_exact) / UB_exact x 100 for H = H1, H2. Negative values
+- **Delta UB.** (UB_H - UB_exact) / UB_exact x 100 for H = H1, H2. Negative values
   mean the heuristic found a better solution than exact C&CG within its time
   limit.
 - **Early-stopped C&CG** is not a separate run. Its values are taken from
